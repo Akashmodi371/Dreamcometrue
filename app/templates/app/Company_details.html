@@ -1,0 +1,58 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block title %}
+        Job Description
+{% endblock title %}
+
+{% block main-content %}
+
+<div class="margin-2">
+<div class="container mt-4" id="company-detail">
+    <p class="font-blog-detail-title">{{placement_company_detail.title|capfirst}} </p>
+    <p class="m-2 d-inline"> By : {{ placement_company_detail.author.first_name|capfirst }} {{ placement_company_detail.author.last_name|capfirst }} - <p class="text-muted d-inline">{{placement_company_detail.post_date}} </p></p> 
+                {% if user.is_authenticated %}
+                {% if request.user.is_staff %}
+
+                            <small>
+                                <a href="{% url 'update_job_post' placement_company_detail.pk %}" class="btn btn-light text-primary btn-sm">- (Edit)</a>
+
+                                <a href="{% url 'delete_post' placement_company_detail.pk %}" class="btn btn-light text-danger btn-sm">(Delete)</a>
+                                
+                            </small>
+
+                {% endif %}
+                {% endif %}
+
+    <hr>
+
+    <div class="text-center">
+
+    {% if placement_company_detail.Company_image %}
+
+    <img class="img-fluid" height='300px' width='400px' src="{{placement_company_detail.Company_image.url}}"> <br><br>
+    
+    {% else %}
+
+        <img class="img-fluid rounded-start" height='400' width='900' src="{% static "app/images/default.jpg" %}">
+
+    {% endif %}
+    </div>
+
+    <div class="ft-blog-paragraph">
+    <p>{{ placement_company_detail.Job_Description|safe }}</p>
+    </div>
+    <br>
+    <div class="text-center">
+        <a href="{{ placement_company_detail.apply_link }}" class="button-job">Apply</a>
+    </div>
+</div>
+</div>
+
+
+<br>
+
+
+
+{% endblock main-content %}

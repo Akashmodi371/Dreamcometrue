@@ -1,0 +1,22 @@
+{% extends "app/base.html" %}
+
+{% block title %} 
+Edit Profile
+{% endblock title %}
+
+{% block main-content %}
+
+<div class="margin-2">
+    <div class="container my-4">
+        <h2>Edit Setting</h2><hr>
+            <div class="form-group">
+                <form action="" class="mb-3" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input value="Save Changes" type="submit" class="btn btn-secondary">
+                </form>
+        </div>
+    </div>
+</div>
+
+{% endblock main-content %}

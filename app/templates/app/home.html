@@ -1,0 +1,186 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block main-content %}
+
+<header>
+	<div class="overlay container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="text-container">
+          <h1>Let us give the best</h1>
+          <p class="h5">DCT provides educational & employment information to help students or job seekers.</p>
+        </div>
+      </div>
+      <div class="col-sm-6">
+          <img src="{% static 'app/images/phone.svg' %}" width="400px" class="img-fluid mt-5" />
+      </div>
+    </div>
+	</div>
+</header>
+
+ <!-- Description -->
+    <div id="description" class="cards-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <br><br><br><br><br>
+                    <h2 class="h2-heading">Services</h2>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+            <div class="row">
+                <div class="col-lg-4">
+                    <!-- Card -->
+                    <a href="{% url 'resources' %}" class="text-decoration-none text-dark"><div class="card">
+                        <div class="card-image">
+                            <img class="img-fluid" src="{% static 'app/images/home4.svg' %}" alt="alternative">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Resources</h5>
+                            <p>DCT help you to find the best courses available on Internet.It encourage people to teach themselves new skills/technology online.</p>
+                        </div>
+                    </div></a>
+                    <!-- end of card -->
+                </div>
+                <div class="col-lg-4">
+                    <!-- Card -->
+                    <a href="#job" class="text-decoration-none text-dark"><div class="card">
+                        <div class="card-image">
+                            <img class="img-fluid" src="{% static 'app/images/home2.svg' %}" alt="alternative">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Job</h5>
+                            <p>DCT provides information of upcoming off-campus hiring drives, Internships. <a href="{% url 'terms_condition' %}" style="text-decoration:none;">read more</a></p>
+                        </div>
+                    </div></a>
+                    <!-- end of card -->
+                  </div>
+
+                  <div class="col-lg-4">
+                    <!-- Card -->
+                    <a href="{% url 'blog' %}" class="text-decoration-none text-dark"><div class="card">
+                        <div class="card-image">
+                            <img class="img-fluid" src="{% static 'app/images/home3.svg' %}" alt="alternative">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Blog</h5>
+                            <p>DCT also acts a blogging platform from which people can share their knowledge, tech reviews, and daily life hacks.</p>
+                        </div>
+                    </div></a>
+                    <!-- end of card -->
+                  </div>
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of cards-1 -->
+    <!-- end of description -->
+
+
+
+<div class="container" id="job">
+  {% if user.is_staff %}
+    <a href="{% url 'Add_Job_Post' %}"> <div style="float:right;" class="mt-1 mb-1"><input class="btn btn-success" type="button" value="New"></div></a>
+  {% endif %}
+</div>
+
+<div class="margin-2">
+{% if Placement_Company_Detail_list %}
+    {% for Placement_Company_Detail in object_list %}
+       <div class="container">
+        <div class="card mb-3" style="max-width: 840px;">
+            <div class="row g-0" href="{% url 'Job_Description' Placement_Company_Detail.pk %}">
+                <div class="col-md-4">
+                {% if Placement_Company_Detail.Company_image %}
+
+                    <img class="img-fluid rounded-start" src="{{Placement_Company_Detail.Company_image.url}}">
+                {% else %}
+
+                    <img class="img-fluid rounded-start" src="{% static "app/images/default.jpg" %}">
+
+                {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h4 class="card-title"> <a href="{% url 'Job_Description' Placement_Company_Detail.pk %}" class="text-decoration-none text-dark">{{ Placement_Company_Detail.title|capfirst}}</a></h4>
+                        <small class="card-title text-muted"> ~ {{Placement_Company_Detail.author.first_name|capfirst}}
+                        {{Placement_Company_Detail.author.last_name|capfirst}} - {{Placement_Company_Detail.post_date}}</small>
+
+                        {% if user.is_authenticated %}
+                        {% if request.user.is_staff %}
+
+                            <small>
+                                <a href="{% url 'update_job_post' Placement_Company_Detail.pk %}" class="text-decoration-none text-primary">- (Edit)</a>
+
+                                <a href="{% url 'delete_post' Placement_Company_Detail.pk %}" class="text-decoration-none text-danger">(Delete)</a>
+
+                            </small>
+
+                        {% endif %}
+                        {% endif %}
+
+                        <p class="card-text h6">{{Placement_Company_Detail.snippet}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+   </div>
+
+<br>
+    {% endfor %}
+
+
+    <!--Pagination-->
+        <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+            <a class="page-link text" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link text" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+        {% endif %}
+
+        {% if page_obj.number|add:'-4' > 1 %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                 <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+           <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    <!--end of Pagination-->
+
+
+{% else %}
+
+ <p>No Post found!!! :(</p>
+
+{% endif %}
+
+{% endblock main-content %}
