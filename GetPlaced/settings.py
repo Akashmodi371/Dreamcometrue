@@ -27,7 +27,7 @@ SECRET_KEY = 'v(s_1s5r9!4xcx++v9s62ha#)xl$&h6=g-r+02x2@u6fmu8w(0'
 # SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = false
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
